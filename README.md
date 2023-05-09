@@ -20,7 +20,6 @@
 `pip install camstim/.`
 4. Download and install `AVbin` for your OS.
  
-## Pilot script
+## Run Scripts
 * Run the pilot_script.py under test-scripts folder to run Full Field Flicker and Static Grating and Drifting Grating
-* Currently it does not have Debug mode
-* Stimulus files are concatenated in this script 
+* Run the production_script.py under test-scripts folder to run Full Field Flicker and Static Grating and Drifting Grating
