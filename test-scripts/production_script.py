@@ -158,9 +158,10 @@ def create_drift(window, n_repeats, frame_rate, current_start_time,
     # from -1 to 1, where for vertical stripes -1 is the maximum speed in 
     # leftward direction and +1 is maximum speed in rightward direction.
     list_of_phases = []
-    current_phase = 0.0
 
     for drift_coefficient in drift_rates:
+        current_phase = 0.0
+
         for drift_direction in list_of_drifts:
             # we operate in degrees here (0-360)
             current_phase = current_phase + drift_coefficient*drift_direction/frame_rate
@@ -214,8 +215,8 @@ def get_stimulus_sequence(window, SESSION_PARAMS_data_folder):
     FPS = 60
     SPATIALFREQ = [0.02, 0.04, 0.08]
     ORIENTATIONS = [0, 90]
-    PHASES = [0, 90]
-    DRIFTRATES = [12, 24]
+    PHASES = [0.0, 90.0/360] # remember that phases in psychopy are in 0-1 range for 0-360 degrees
+    DRIFTRATES = [180] # [12, 24]
     ADD_FLASHES = True
     ADD_STATIC = True
     ADD_DRIFT = True
@@ -232,8 +233,8 @@ def get_stimulus_sequence(window, SESSION_PARAMS_data_folder):
 
 
     RepeatStim1 =  read_file(os.path.join(SESSION_PARAMS_data_folder, 
-                                             "BinoWhiteNoise_8Sec.txt")) #NOTE CHANGE PR
-    
+                                             "BinoWhiteNoise_8sec_60fps_15HzNyq.txt")) #NOTE CHANGE PR
+      
     RepeatStim2 =  read_file(os.path.join(SESSION_PARAMS_data_folder, 
                                               "ExpWhiteNoise_8sec.txt")) #NOTE CHANGE PR
 
@@ -247,20 +248,24 @@ def get_stimulus_sequence(window, SESSION_PARAMS_data_folder):
     all_stim = []
 
     if ADD_FLASHES:
-        flash_sequence1, current_start_time = create_flashes(
-                RepeatStim1, window, Nrepeats, FPS, current_start_time
-                )
-        all_stim.append(flash_sequence1)
+        # Create a sequence of flashes
+        # The order was chosen to have the most intense stimulus last
 
-        flash_sequence2, current_start_time = create_flashes(
-                RepeatStim2, window, Nrepeats, FPS, current_start_time
-                )
-        all_stim.append(flash_sequence2)
-
-        flash_sequence3, current_start_time = create_flashes(           
+        flash_sequenceGaussian, current_start_time = create_flashes(
                 RepeatStim3, window, Nrepeats, FPS, current_start_time
                 )
-        all_stim.append(flash_sequence3)
+        all_stim.append(flash_sequenceGaussian)
+
+        flash_sequenceExp, current_start_time = create_flashes(           
+                RepeatStim2, window, Nrepeats, FPS, current_start_time
+                )
+        all_stim.append(flash_sequenceExp)
+
+        flash_sequenceWhiteNoise, current_start_time = create_flashes(
+                RepeatStim1, window, Nrepeats, FPS, current_start_time
+                )
+        all_stim.append(flash_sequenceWhiteNoise)
+
         logging.info("Flashes end at : %f min", current_start_time/60)
 
     if ADD_STATIC:
