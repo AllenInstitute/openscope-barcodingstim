@@ -186,7 +186,7 @@ def create_drift(window, n_repeats, frame_rate, current_start_time,
                 'Phase': (list_of_phases, 3),
         },
         sweep_length=1.0/frame_rate,
-        start_time=0.0,
+        start_time=1.0,
         blank_length=0,
         blank_sweeps=0,
         runs=n_repeats,
@@ -216,8 +216,8 @@ def get_stimulus_sequence(window, SESSION_PARAMS_data_folder):
     ORIENTATIONS = [0, 90]
     PHASES = [0.0, 90.0/360] # remember that phases in psychopy are in 0-1 range for 0-360 degrees
     DRIFTRATES = [180, 360] # [12, 24]
-    ADD_FLASHES = True
-    ADD_STATIC = True
+    ADD_FLASHES = False
+    ADD_STATIC = False
     ADD_DRIFT = True
     Nrepeats = 1 # 32 # number of time the repeated sequences repeat
     ##############################################
