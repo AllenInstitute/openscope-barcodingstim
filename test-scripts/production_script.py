@@ -134,7 +134,7 @@ def create_static(list_of_contrasts, window, n_repeats, frame_rate, current_star
 
 def create_drift(window, n_repeats, frame_rate, current_start_time,
                   list_of_spatialfreq, list_of_orientations, 
-                  list_of_drifts, drift_rates):
+                  list_of_drifts, drift_rate):
     """Create drifting grating stimulus series.
         args:
             window: window object
@@ -144,7 +144,7 @@ def create_drift(window, n_repeats, frame_rate, current_start_time,
             list_of_spatialfreq: list of spatial frequencies to be presented
             list_of_orientations: list of orientations to be presented
             list_of_drifts: list of drifts to be presented
-            drift_rates: list of drift rates to be presented
+            drift_rate: drift rate to be used
         returns:
             stimulus_obj: CamStim Stimulus object
             end_stim: updated current start time of the next stimulus
@@ -159,14 +159,13 @@ def create_drift(window, n_repeats, frame_rate, current_start_time,
     # leftward direction and +1 is maximum speed in rightward direction.
     list_of_phases = []
 
-    for drift_coefficient in drift_rates:
-        current_phase = 0.0
+    current_phase = 0.0
 
-        for drift_direction in list_of_drifts:
-            # we operate in degrees here (0-360)
-            current_phase = current_phase + drift_coefficient*drift_direction/frame_rate
-            current_phase = np.mod(current_phase, 360)
-            list_of_phases.append(current_phase)
+    for drift_direction in list_of_drifts:
+        # we operate in degrees here (0-360)
+        current_phase = current_phase + drift_rate*drift_direction/frame_rate
+        current_phase = np.mod(current_phase, 360)
+        list_of_phases.append(current_phase)
 
     # psychopy is unconventional in that phases have modulus 1
     list_of_phases = [x/360 for x in list_of_phases]
@@ -216,7 +215,7 @@ def get_stimulus_sequence(window, SESSION_PARAMS_data_folder):
     SPATIALFREQ = [0.02, 0.04, 0.08]
     ORIENTATIONS = [0, 90]
     PHASES = [0.0, 90.0/360] # remember that phases in psychopy are in 0-1 range for 0-360 degrees
-    DRIFTRATES = [180] # [12, 24]
+    DRIFTRATES = [180, 360] # [12, 24]
     ADD_FLASHES = True
     ADD_STATIC = True
     ADD_DRIFT = True
@@ -278,13 +277,14 @@ def get_stimulus_sequence(window, SESSION_PARAMS_data_folder):
         logging.info("Static gratings end at : %f min", current_start_time/60)
 
     if ADD_DRIFT:
-        dg_sequence, current_start_time = create_drift(
-                window, Nrepeats, FPS, current_start_time,
-                SPATIALFREQ, ORIENTATIONS, RepeatStim1, DRIFTRATES
-                )
-        
-        all_stim.append(dg_sequence)    
-        logging.info("Drifting gratings end at : %f min", current_start_time/60)
+        for drift_rate in DRIFTRATES:
+            dg_sequence, current_start_time = create_drift(
+                    window, Nrepeats, FPS, current_start_time,
+                    SPATIALFREQ, ORIENTATIONS, RepeatStim1, drift_rate
+                    )
+            
+            all_stim.append(dg_sequence)    
+            logging.info("Drifting gratings end at : %f min", current_start_time/60)
 
     logging.info("Total duration of stimulus sequence: %f min", current_start_time/60)
     # This is the stimulus sequence that will be presented
