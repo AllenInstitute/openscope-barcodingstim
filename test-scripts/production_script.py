@@ -216,8 +216,8 @@ def get_stimulus_sequence(window, SESSION_PARAMS_data_folder):
     ORIENTATIONS = [0, 90]
     PHASES = [0.0, 90.0/360] # remember that phases in psychopy are in 0-1 range for 0-360 degrees
     DRIFTRATES = [180, 360] # [12, 24]
-    ADD_FLASHES = False
-    ADD_STATIC = False
+    ADD_FLASHES = True
+    ADD_STATIC = True
     ADD_DRIFT = True
     Nrepeats = 1 # 32 # number of time the repeated sequences repeat
     ##############################################
@@ -284,14 +284,8 @@ def get_stimulus_sequence(window, SESSION_PARAMS_data_folder):
                     )
 
             all_stim.append(dg_sequence)    
-            
+
             logging.info("Drifting gratings end at : %f min", current_start_time/60)
-            sg_sequence, current_start_time = create_static(
-                RepeatStim1, window, Nrepeats, FPS, current_start_time,
-                SPATIALFREQ, ORIENTATIONS, PHASES
-                )
-        
-            all_stim.append(sg_sequence)
 
     logging.info("Total duration of stimulus sequence: %f min", current_start_time/60)
     # This is the stimulus sequence that will be presented
