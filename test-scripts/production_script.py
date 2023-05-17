@@ -186,7 +186,7 @@ def create_drift(window, n_repeats, frame_rate, current_start_time,
                 'Phase': (list_of_phases, 3),
         },
         sweep_length=1.0/frame_rate,
-        start_time=1.0,
+        start_time=0,
         blank_length=0,
         blank_sweeps=0,
         runs=n_repeats,
@@ -285,6 +285,12 @@ def get_stimulus_sequence(window, SESSION_PARAMS_data_folder):
             
             all_stim.append(dg_sequence)    
             logging.info("Drifting gratings end at : %f min", current_start_time/60)
+            sg_sequence, current_start_time = create_static(
+                RepeatStim1, window, Nrepeats, FPS, current_start_time,
+                SPATIALFREQ, ORIENTATIONS, PHASES
+                )
+        
+            all_stim.append(sg_sequence)
 
     logging.info("Total duration of stimulus sequence: %f min", current_start_time/60)
     # This is the stimulus sequence that will be presented
