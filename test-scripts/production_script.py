@@ -282,8 +282,9 @@ def get_stimulus_sequence(window, SESSION_PARAMS_data_folder):
                     window, Nrepeats, FPS, current_start_time,
                     SPATIALFREQ, ORIENTATIONS, RepeatStim1, drift_rate
                     )
-            
+
             all_stim.append(dg_sequence)    
+            
             logging.info("Drifting gratings end at : %f min", current_start_time/60)
             sg_sequence, current_start_time = create_static(
                 RepeatStim1, window, Nrepeats, FPS, current_start_time,
