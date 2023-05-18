@@ -252,6 +252,7 @@ def create_flashes(list_of_contrasts, window, n_repeats, frame_rate, current_sta
     end_stim = current_start_time+duration_stim
     
     stimulus_obj.set_display_sequence([(current_start_time, end_stim)])
+    stimulus_obj.stim_path = r"C:\\not_a_stim_script\\flash_block.stim"
 
     return stimulus_obj, end_stim
 
@@ -314,6 +315,7 @@ def create_static(list_of_contrasts, window, n_repeats, frame_rate, current_star
     end_stim = current_start_time+duration_stim
     
     stimulus_obj.set_display_sequence([(current_start_time, end_stim)])
+    stimulus_obj.stim_path = r"C:\\not_a_stim_script\\static_block.stim"
 
     return stimulus_obj, end_stim
 
@@ -378,6 +380,7 @@ def create_drift(window, n_repeats, frame_rate, current_start_time,
         shuffle=False,
         save_sweep_table=True,
         )
+    stimulus_obj.stim_path = r"C:\\not_a_stim_script\\drift_block_driftrate_"+str(drift_rate)+".stim"
 
     # The duration of the stimulus is the number of unique stimuli 
     # divided by the frame rate
@@ -393,7 +396,7 @@ def create_drift(window, n_repeats, frame_rate, current_start_time,
 
     return stimulus_obj, end_stim
 
-def create_receptive_field_mapping(number_runs = 15):
+def create_receptive_field_mapping(window, number_runs = 15):
     x = np.arange(-40,45,10)
     y = np.arange(-40,45,10)
     position = []
@@ -423,11 +426,11 @@ def create_receptive_field_mapping(number_runs = 15):
         shuffle=True,
         save_sweep_table=True,
         )
-    stimulus.stim_path = r"C:\\not_a_stim_script\\create_receptive_field_mapping.stim"
+    stimulus.stim_path = r"C:\\not_a_stim_script\\receptive_field_block.stim"
 
     return stimulus
 
-def get_stimulus_sequence(window, SESSION_PARAMS_data_folder):
+def get_stimulus_sequence(window, SESSION_PARAMS_data_folder, ADD_FLASHES, ADD_STATIC, ADD_DRIFT, ADD_RF, Nrepeats, number_runs_rf):
 
     ################# Parameters #################
     FPS = 60
@@ -435,11 +438,6 @@ def get_stimulus_sequence(window, SESSION_PARAMS_data_folder):
     ORIENTATIONS = [0, 90]
     PHASES = [0.0, 90.0/360] # remember that phases in psychopy are in 0-1 range for 0-360 degrees
     DRIFTRATES = [180, 360] # [12, 24]
-    ADD_FLASHES = True
-    ADD_STATIC = True
-    ADD_DRIFT = True
-    ADD_RF = True
-    Nrepeats = 1 # 32 # number of time the repeated sequences repeat
     ##############################################
 
     # Read in the stimulus sequence
@@ -510,8 +508,8 @@ def get_stimulus_sequence(window, SESSION_PARAMS_data_folder):
     if ADD_RF:
         # We generate the receptive field section
         # 8 is the number of repeats (20min).
-        gabors_rf_20 = create_receptive_field_mapping(8)
-        gabors_rf_20_ds = [(current_start_time, current_start_time+640)]
+        gabors_rf_20  = create_receptive_field_mapping(window, number_runs_rf)
+        gabors_rf_20_ds = [(current_start_time, current_start_time+60*number_runs_rf)]
         gabors_rf_20.set_display_sequence(gabors_rf_20_ds)
         all_stim.append(gabors_rf_20)    
         
@@ -546,6 +544,15 @@ if __name__ == "__main__":
     # mtrain should be providing : Gamma1.Luminance50
     monitor_name = json_params.get('monitor_name', "testMonitor")
 
+    # mtrain should be providing : 1
+    ADD_FLASHES = json_params.get('add_flashes', True)
+    ADD_STATIC = json_params.get('add_static', True)
+    ADD_DRIFT = json_params.get('add_drift', True)
+    ADD_RF = json_params.get('add_rf', True)
+    number_runs_rf = json_params.get('number_runs_rf', 1) # 8 is the number of repeats for prod(8min).
+    Nrepeats = json_params.get('n_repeats', 1) # 
+    opto_disabled = json_params.get('disable_opto', True)
+
     # create a monitor
     if monitor_name == 'testMonitor':
         monitor = monitors.Monitor(monitor_name, distance=dist, width=wid)
@@ -559,8 +566,14 @@ if __name__ == "__main__":
                     warp=Warp.Spherical
                     )
 
-    sequence_stim = get_stimulus_sequence(window, SESSION_PARAMS_data_folder)
-
+    sequence_stim = get_stimulus_sequence(window, SESSION_PARAMS_data_folder,     
+                                          ADD_FLASHES = ADD_FLASHES,
+                                        ADD_STATIC = ADD_STATIC,
+                                        ADD_DRIFT = ADD_DRIFT,
+                                        ADD_RF = ADD_RF,
+                                        Nrepeats = Nrepeats,
+                                        number_runs_rf = number_runs_rf
+                                        )      
 
     ss = SweepStim(window,
                     stimuli=sequence_stim,
@@ -588,7 +601,6 @@ if __name__ == "__main__":
     except SystemExit:
         print("We prevent camstim exiting the script to complete optotagging")
 
-    opto_disabled = json_params.get('disable_opto', True)
     if not(opto_disabled):
         from camstim.misc import get_config
         from camstim.zro import agent
