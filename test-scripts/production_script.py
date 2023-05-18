@@ -453,10 +453,10 @@ def get_stimulus_sequence(window, SESSION_PARAMS_data_folder, ADD_FLASHES, ADD_S
                                              "BinoWhiteNoise_8sec_60fps_15HzNyq.txt")) #NOTE CHANGE PR
       
     RepeatStim2 =  read_file(os.path.join(SESSION_PARAMS_data_folder, 
-                                              "ExpWhiteNoise_8sec.txt")) #NOTE CHANGE PR
+                                              "ExpWhiteNoise_8sec_60fps_15HzNyq.txt")) #NOTE CHANGE PR
 
     RepeatStim3 =  read_file(os.path.join(SESSION_PARAMS_data_folder, 
-                                              "GaussWhiteNoise_8sec.txt")) #NOTE CHANGE PR
+                                              "GaussWhiteNoise_8sec_60fps_15HzNyq.txt")) #NOTE CHANGE PR
 
     # This is used to keep track of the current start time of the stimulus
     current_start_time = 0
