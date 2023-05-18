@@ -591,9 +591,7 @@ if __name__ == "__main__":
     ss.add_item(f, "foraging")
 
     # Run the SweepStim instance
-    t = time.localtime()
     ss.run()
-    logging.info("total time: %f", t - time.localtime())
 
      # run it
     try:
