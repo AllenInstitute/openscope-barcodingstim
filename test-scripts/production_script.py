@@ -590,9 +590,6 @@ if __name__ == "__main__":
     
     ss.add_item(f, "foraging")
 
-    # Run the SweepStim instance
-    ss.run()
-
      # run it
     try:
         ss.run()
