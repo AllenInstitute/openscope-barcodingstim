@@ -199,7 +199,10 @@ end of optotagging section
 def read_file(path):
     with open(path) as f:
         Contrast = f.readlines()
+        # Assuuming there are multiple lines in the file
+        # This splits the lines into lists of strings
         Contrast = [x.split(',') for x in Contrast]
+
         Contrast = [x for x in Contrast if len(x) > 1]
         Contrast = [[y.strip() for y in x] for x in Contrast]
         # remove empty strings
@@ -437,7 +440,7 @@ def get_stimulus_sequence(window, SESSION_PARAMS_data_folder, ADD_FLASHES, ADD_S
     SPATIALFREQ = [0.02, 0.04, 0.08]
     ORIENTATIONS = [0, 90]
     PHASES = [0.0, 90.0/360] # remember that phases in psychopy are in 0-1 range for 0-360 degrees
-    DRIFTRATES = [180, 360] # [12, 24]
+    DRIFTRATES = [360, 540] # [12, 24]
     ##############################################
 
     # Read in the stimulus sequence
