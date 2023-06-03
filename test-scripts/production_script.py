@@ -251,7 +251,7 @@ def create_flashes(list_of_contrasts, window, n_repeats, frame_rate, current_sta
     
     # For flashes, the duration of the stimulus is the number of unique stimuli 
     # divided by the frame rate
-    duration_stim = len(list_of_contrasts)/frame_rate 
+    duration_stim = n_repeats*len(list_of_contrasts)/frame_rate 
     end_stim = current_start_time+duration_stim
     
     stimulus_obj.set_display_sequence([(current_start_time, end_stim)])
@@ -516,7 +516,7 @@ def get_stimulus_sequence(window, SESSION_PARAMS_data_folder, ADD_FLASHES, ADD_S
         gabors_rf_20.set_display_sequence(gabors_rf_20_ds)
         all_stim.append(gabors_rf_20)    
         
-        logging.info("Receptive fields end at : %f min", current_start_time/60)
+        logging.info("Receptive fields end at : %f min", (current_start_time+60*number_runs_rf)/60)
 
     return all_stim
 
@@ -526,7 +526,7 @@ if __name__ == "__main__":
     parser.add_argument("json_path", nargs="?", type=str, default="")
 
     args, _ = parser.parse_known_args() # <- this ensures that we ignore other arguments that might be needed by camstim
-    
+    logging.basicConfig(level=logging.INFO)
     # logging.info args
     if args.json_path == "":
         logging.warning("No json path provided, using default parameters. THIS IS NOT THE EXPECTED BEHAVIOR FOR PRODUCTION RUNS")
