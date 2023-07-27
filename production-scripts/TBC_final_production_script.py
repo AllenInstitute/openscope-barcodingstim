@@ -436,7 +436,7 @@ def create_receptive_field_mapping(window, number_runs = 15):
 
     return stimulus
 
-def get_stimulus_sequence(window, SESSION_PARAMS_data_folder, ADD_FULLFIELD, ADD_STATIC, ADD_DRIFT, ADD_RF, Nrepeats, number_runs_rf):
+def get_stimulus_sequence(window, SESSION_PARAMS_data_folder, ADD_UNIQUE, ADD_FULLFIELD, ADD_STATIC, ADD_DRIFT, ADD_RF, Nrepeats, number_runs_rf):
 
     ################# Parameters #################
     # PR will be changing these parameters - TBD
@@ -565,7 +565,6 @@ if __name__ == "__main__":
                     screen=0,
                     warp=Warp.Spherical
                     )
-
     sequence_stim = get_stimulus_sequence(window, SESSION_PARAMS_data_folder,
                                           ADD_UNIQUE = ADD_UNIQUE,     
                                           ADD_FULLFIELD = ADD_FULLFIELD,
