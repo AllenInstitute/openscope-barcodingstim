@@ -449,10 +449,10 @@ def get_stimulus_sequence(window, SESSION_PARAMS_data_folder, ADD_UNIQUE, ADD_FU
 
     # Read in the stimulus sequences from csv files
     WhiteNoiseLong =  read_file(os.path.join(SESSION_PARAMS_data_folder, 
-                                             "TBC_WhiteNoise_120sec.txt")) # NEW FILE WILL BE PROVIDED
+                                             "BinoWhiteNoise_120sec_teststim_v2.txt")) # NEW FILE WILL BE PROVIDED
 
     WhiteNoiseShort =  read_file(os.path.join(SESSION_PARAMS_data_folder, 
-                                              "TBC_WhiteNoise_8sec.txt"))  # NEW FILE WILL BE PROVIDED
+                                              "BinoWhiteNoise_8sec_teststim_v2.txt"))  # NEW FILE WILL BE PROVIDED
 
     # This is used to keep track of the current start time of the stimulus
     current_start_time = 0
