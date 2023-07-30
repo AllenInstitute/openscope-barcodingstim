@@ -441,10 +441,11 @@ def get_stimulus_sequence(window, SESSION_PARAMS_data_folder, ADD_UNIQUE, ADD_FU
     ################# Parameters #################
     # PR will be changing these parameters - TBD
     FPS = 60            
-    SPATIALFREQ = [0.02, 0.04, 0.08] 
-    ORIENTATIONS = [0, 90]
-    PHASES = [0.0, 90.0/360]  
+    SPATIALFREQ = [0.02, 0.04] 
+    ORIENTATIONS = [0, 45, 90, 135]
+    PHASES = [0.0, 0.50] 
     DRIFTRATES = [360, 540]  
+
     ##############################################
 
     # Read in the stimulus sequences from csv files
